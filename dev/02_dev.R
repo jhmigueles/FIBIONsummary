@@ -19,6 +19,7 @@ usethis::use_package( "thinkr" )
 usethis::use_package( "shinyjs" )
 usethis::use_package( "tcltk" )
 usethis::use_package( "plyr" )
+usethis::use_package( "utils" )
 
 
 ## Add modules ----

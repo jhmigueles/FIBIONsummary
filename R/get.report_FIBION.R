@@ -21,12 +21,12 @@ get.report_FIBION = function(datadir, outputdir = "./", store.csv = FALSE) {
   }
 
   # daily output ----
-  pb = txtProgressBar(min = 0, max = length(files), style = 3,
+  pb = utils::txtProgressBar(min = 0, max = length(files), style = 3,
                       title = paste0("Processing ", length(files), " files..."))
   for (i in 1:length(files)) {
-    setTxtProgressBar(pb, i)
+    utils::setTxtProgressBar(pb, i)
     # read data
-    dat = read.csv(files[i])
+    dat = utils::read.csv(files[i])
 
     # ID
     id = tools::file_path_sans_ext(basename(files[i]))
