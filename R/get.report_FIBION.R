@@ -2,6 +2,7 @@
 #'
 #' @param datadir Path to directory where the output csv files exported from FIBION are stored.
 #' @param outputdir Path to directory where the data sets should be stored.
+#' @param store.csv Logical to indicate whether the csv reports should be stored as csv files in outputdir.
 #'
 #' @return FIBION data aggregated at day and week levels.
 #' @export
@@ -36,8 +37,8 @@ get.report_FIBION = function(datadir, outputdir = "./", store.csv = FALSE) {
 
     options(warn = -1)
     for (ci in 4:(ncol(dat) - 1)) {
-      if (ci == 4) daily = aggregate(dat[, ci] ~ dat$date, FUN = sum)
-      if (ci > 4) daily = merge(daily, aggregate(dat[, ci] ~ dat$date, FUN = sum), by = "dat$date")
+      if (ci == 4) daily = stats::aggregate(dat[, ci] ~ dat$date, FUN = sum)
+      if (ci > 4) daily = merge(daily, stats::aggregate(dat[, ci] ~ dat$date, FUN = sum), by = "dat$date")
     }
     options(warn = 0)
 
@@ -89,8 +90,8 @@ get.report_FIBION = function(datadir, outputdir = "./", store.csv = FALSE) {
   if(isTRUE(store.csv)) {
     if(!dir.exists(file.path(outputdir))) dir.create(outputdir)
     
-    write.csv(day_out, file.path(outputdir, "daysummary.csv"), row.names = F)
-    write.csv(week_out, file.path(outputdir, "weeksummary.csv"), row.names = F)
+    utils::write.csv(day_out, file.path(outputdir, "daysummary.csv"), row.names = F)
+    utils::write.csv(week_out, file.path(outputdir, "weeksummary.csv"), row.names = F)
   }
   
   # return

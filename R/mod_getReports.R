@@ -109,7 +109,7 @@ mod_getReports_server <- function(id){
           incProgress(0.5/length(datadir), 
                       detail = paste("Processing \n", fname, sep = ""))
           # Run function
-          output = get.report_FIBION(datadir = datadir[i], outputdir = outputdir)
+          output = FIBIONsummary::get.report_FIBION(datadir = datadir[i], outputdir = outputdir)
           if (i == 1) {
             daySummary = output$daySummary
             weekSummary = output$weekSummary
@@ -121,8 +121,8 @@ mod_getReports_server <- function(id){
                       detail = paste("Done \n", fname, sep = ""))
         }
         # disable_inputs(input_list,T)
-        write.csv(daySummary, file = file.path(outputdir, "daySummary.csv"), row.names = F)
-        write.csv(weekSummary, file = file.path(outputdir, "weekSummary.csv"), row.names = F)
+        utils::write.csv(daySummary, file = file.path(outputdir, "daySummary.csv"), row.names = F)
+        utils::write.csv(weekSummary, file = file.path(outputdir, "weekSummary.csv"), row.names = F)
       })
     })
   })

@@ -20,6 +20,8 @@ usethis::use_package( "shinyjs" )
 usethis::use_package( "tcltk" )
 usethis::use_package( "plyr" )
 usethis::use_package( "utils" )
+usethis::use_package( "stats" )
+usethis::use_package( "rlang" )
 
 
 ## Add modules ----
