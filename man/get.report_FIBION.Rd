@@ -10,6 +10,8 @@ get.report_FIBION(datadir, outputdir = "./", store.csv = FALSE)
 \item{datadir}{Path to directory where the output csv files exported from FIBION are stored.}
 
 \item{outputdir}{Path to directory where the data sets should be stored.}
+
+\item{store.csv}{Logical to indicate whether the csv reports should be stored as csv files in outputdir.}
 }
 \value{
 FIBION data aggregated at day and week levels.
