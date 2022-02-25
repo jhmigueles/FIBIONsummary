@@ -1,5 +1,5 @@
 Package: FIBIONsummary
-Title: FIBION summary reports
+Title: FIBION Summary Reports
 Version: 0.0.0.9000
 Authors@R: person('Jairo H', 'Migueles', email = 'jairo.hidalgo.migueles@gmail.com', role = c('cre', 'aut'))
 Description: A shiny application to summarize the FIBION activity csv files into day- and week-level datasets.

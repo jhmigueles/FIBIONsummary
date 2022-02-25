@@ -20,7 +20,7 @@
 ## 
 golem::fill_desc(
   pkg_name = "FIBIONsummary", # The Name of the package containing the App 
-  pkg_title = "FIBION summary reports", # The Title of the package containing the App 
+  pkg_title = "FIBION Summary Reports", # The Title of the package containing the App 
   pkg_description = "A shiny application to summarize the FIBION activity csv files into day- and week-level datasets.", # The Description of the package containing the App 
   author_first_name = "Jairo H", # Your First Name
   author_last_name = "Migueles", # Your Last Name
