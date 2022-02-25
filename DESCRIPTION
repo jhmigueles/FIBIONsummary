@@ -5,20 +5,14 @@ Authors@R: person('Jairo H', 'Migueles', email = 'jairo.hidalgo.migueles@gmail.c
 Description: A shiny application to summarize the FIBION activity csv files into day- and week-level datasets.
 License: MIT + file LICENSE
 Imports: 
-    attempt,
     config (>= 0.3.1),
-    DT,
-    glue,
     golem (>= 0.3.1),
-    htmltools,
     plyr,
-    processx,
     rlang,
     shiny (>= 1.7.1),
     shinyjs,
     stats,
     tcltk,
-    thinkr,
     utils
 Encoding: UTF-8
 LazyData: true
