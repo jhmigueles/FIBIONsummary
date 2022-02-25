@@ -19,6 +19,3 @@ FIBION data aggregated at day and week levels.
 \description{
 get.report_FIBION
 }
-\examples{
-get.report_FIBION(datadir = "./data/", outputdir = "./")
-}

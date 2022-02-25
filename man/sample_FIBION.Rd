@@ -26,7 +26,4 @@ Sample csv exported from FIBION website
     \item{\code{activity.steps2.count}}{number of sporadic steps in current epoch}
   }
 }
-\examples{
-utils::read.csv(sample_FIBION.csv)
-}
 \keyword{datasets}

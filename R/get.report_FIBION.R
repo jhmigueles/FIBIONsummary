@@ -6,9 +6,6 @@
 #'
 #' @return FIBION data aggregated at day and week levels.
 #' @export
-#'
-#' @examples
-#' get.report_FIBION(datadir = "./data/", outputdir = "./")
 get.report_FIBION = function(datadir, outputdir = "./", store.csv = FALSE) {
   
   # files to analyze
