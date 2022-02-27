@@ -5,12 +5,17 @@
 #' @import shiny
 #' @noRd
 app_ui <- function(request) {
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+  )
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic 
     fluidPage(
-      mod_getReports_ui("getReports_ui_1")    )
+      h1(" FIBION Summary"),
+      mod_getReports_ui("getReports_ui_1")
+    )
   )
 }
 
@@ -27,7 +32,7 @@ golem_add_external_resources <- function(){
   add_resource_path(
     'www', app_sys('app/www')
   )
- 
+  
   tags$head(
     favicon(),
     bundle_resources(

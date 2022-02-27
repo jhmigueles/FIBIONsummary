@@ -13,7 +13,11 @@ body {background-color: #FFFFFF;}
  font-weight:bold;
 }
 h1{
+<<<<<<< HEAD:inst/app/www/custom.css
   color:#E85A4F;
+=======
+  color:#003f5c;
+>>>>>>> d99bea2bca2c203eb609159d3848e92f7bd17077:inst/app/www/style.css
   text-align:left;
   font-weight:bolder;
 }

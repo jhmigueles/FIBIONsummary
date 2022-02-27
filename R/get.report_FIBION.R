@@ -6,7 +6,7 @@
 #'
 #' @return FIBION data aggregated at day and week levels.
 #' @export
-get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", store.csv = FALSE) {
+get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", store.csv = FALSE, ID = NULL) {
   
   # IF FILEPATH OR DIRECTORY PATH PROVIDED... ----
   if (!is.null(datadir) & is.null(data)) {
@@ -18,29 +18,38 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     } else { 
       stop("Revise your datadir path, the directory does not exist or does not contain any csv file")
     }
-    
+    toProcess = length(files)
   }
   
   # IF DATA.FRAME PROVIDED... ----
   if (!is.null(data) & is.null(datadir)) {
     files = data
+    toProcess = 1
   }
   
   if (!is.null(data) & !is.null(datadir)) stop("datadir and data provided, please define only one of them")
 
   # daily output ----
-  pb = utils::txtProgressBar(min = 0, max = length(files), style = 3,
+  pb = utils::txtProgressBar(min = 0, max = toProcess , style = 3,
                       title = paste0("Processing ", length(files), " files..."))
-  for (i in 1:length(files)) {
+  
+  for (i in 1:toProcess) {
     utils::setTxtProgressBar(pb, i)
     # read data
-    dat = utils::read.csv(files[i])
-
-    # ID
-    id = tools::file_path_sans_ext(basename(files[i]))
-
+    if(is.character(files)) {
+      dat = utils::read.csv(files[i])
+      # ID
+      id = tools::file_path_sans_ext(basename(files[i]))
+    }
+    if(is.data.frame(files)) {
+      dat = files
+      id = "not extracted"
+      if (!is.null(ID)) id = ID
+    }
+    
     # date
-    dat$date = as.POSIXct(dat$local, tz = "Europe/Stockholm")
+    dat$date = substr(as.character(as.POSIXct(dat$unixts/1000, origin = "1970-01-01")), 1, 10)
+    date = as.POSIXct(dat$unixts/1000, origin = "1970-01-01")
 
     options(warn = -1)
     for (ci in 4:(ncol(dat) - 1)) {
@@ -50,7 +59,7 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     options(warn = 0)
 
     # some extra vars
-    daily$Weekday = as.numeric(format(daily[, 1], "%u"))
+    daily$Weekday = as.numeric(format(as.POSIXct(daily[, 1]), format="%u"))
     daily$window.time = rowSums(daily[,2:(ncol(daily) - 5)])
     daily$ID = id
 

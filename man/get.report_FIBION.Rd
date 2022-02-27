@@ -4,7 +4,13 @@
 \alias{get.report_FIBION}
 \title{get.report_FIBION}
 \usage{
-get.report_FIBION(datadir, outputdir = "./", store.csv = FALSE)
+get.report_FIBION(
+  datadir = NULL,
+  data = NULL,
+  outputdir = "./",
+  store.csv = FALSE,
+  ID = NULL
+)
 }
 \arguments{
 \item{datadir}{Path to directory where the output csv files exported from FIBION are stored.}
