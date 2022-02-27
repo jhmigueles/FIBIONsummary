@@ -49,6 +49,7 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     
     # date
     dat$date = substr(as.character(as.POSIXct(dat$unixts/1000, origin = "1970-01-01")), 1, 10)
+    date = as.POSIXct(dat$unixts/1000, origin = "1970-01-01")
 
     options(warn = -1)
     for (ci in 4:(ncol(dat) - 1)) {
@@ -58,7 +59,7 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     options(warn = 0)
 
     # some extra vars
-    daily$Weekday = as.numeric(format(daily[, 1], "%u"))
+    daily$Weekday = as.numeric(format(as.POSIXct(daily[, 1]), format="%u"))
     daily$window.time = rowSums(daily[,2:(ncol(daily) - 5)])
     daily$ID = id
 
