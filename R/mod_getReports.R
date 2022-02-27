@@ -27,15 +27,9 @@ mod_getReports_ui = function(id){
     mainPanel(
       fluidRow(
         col_6(
-<<<<<<< HEAD
-          div(style = 'overflow-x: scroll; overflow-y: scroll;height:300px;',
-              tableOutput(ns("selected")), 
-              width = 6, height = "300px")
-=======
           div(style = 'overflow-x: scroll; overflow-y: scroll;height:600px;',
               tableOutput(ns("daySummary")),
               width = 6, height = "600px")
->>>>>>> d99bea2bca2c203eb609159d3848e92f7bd17077
         ),
         col_6(
           div(style = 'overflow-x: scroll; overflow-y: scroll;height:600px;',
