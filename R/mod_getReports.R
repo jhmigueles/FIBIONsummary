@@ -35,7 +35,7 @@ mod_getReports_ui <- function(id){
     ),
     mainPanel(
       fluidRow(
-        h1("Welcome to FIBION summary")
+        h1("FIBION Summary")
       ),
       fluidRow(
         col_6(
@@ -65,7 +65,7 @@ mod_getReports_server <- function(id){
     makeReactiveBinding("datadir")
     observeEvent(input$datadir,{
       # Reactive datadir
-      datadir <<- tcltk::tk_choose.files()
+      datadir <<- tcltk::tk_choose.files(getwd())
       # Enable run
       if((length(datadir) > 0 & length(outputdir) > 0)) shinyjs::enable("run")
     })
@@ -83,7 +83,7 @@ mod_getReports_server <- function(id){
     makeReactiveBinding("outputdir")
     observeEvent(input$outputdir,{
       # Define outputdir
-      outputdir <<- tcltk::tk_choose.dir()
+      outputdir <<- tcltk::tk_choose.dir(getwd())
       # Enable run
       if((length(datadir) > 0 & length(outputdir) > 0)) shinyjs::enable("run")
     })
