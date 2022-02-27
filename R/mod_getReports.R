@@ -27,14 +27,14 @@ mod_getReports_ui = function(id){
     mainPanel(
       fluidRow(
         col_6(
-          div(style = 'overflow-x: scroll; overflow-y: scroll;height:600px;',
+          div(style = 'overflow-x: scroll; overflow-y: scroll;height:400px;',
               tableOutput(ns("daySummary")),
-              width = 6, height = "600px")
+              width = 6, height = "400px")
         ),
         col_6(
-          div(style = 'overflow-x: scroll; overflow-y: scroll;height:600px;',
+          div(style = 'overflow-x: scroll; overflow-y: scroll;height:400px;',
               tableOutput(ns("weekSummary")),
-              width = 6, height = "600px")
+              width = 6, height = "400px")
         )
       )
     )
