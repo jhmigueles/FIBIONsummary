@@ -31,6 +31,11 @@ golem::add_rstudioconnect_file()
 golem::add_shinyappsio_file()
 golem::add_shinyserver_file()
 
+
+# Update app in shinyapps.io
+library(rsconnect)
+rsconnect::deployApp("./")
+
 ## Docker ----
 ## If you want to deploy via a generic Dockerfile
 golem::add_dockerfile()
@@ -40,3 +45,5 @@ golem::add_dockerfile_shinyproxy()
 
 ## If you want to deploy to Heroku
 golem::add_dockerfile_heroku()
+
+
