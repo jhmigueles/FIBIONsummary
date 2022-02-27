@@ -48,7 +48,7 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     }
     
     # date
-    dat$date = as.character(as.POSIXct(dat$unixts/100, origin = "1970-01-01"))
+    dat$date = substr(as.character(as.POSIXct(dat$unixts/1000, origin = "1970-01-01")), 1, 10)
 
     options(warn = -1)
     for (ci in 4:(ncol(dat) - 1)) {
