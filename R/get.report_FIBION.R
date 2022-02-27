@@ -18,27 +18,34 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     } else { 
       stop("Revise your datadir path, the directory does not exist or does not contain any csv file")
     }
-    
+    toProcess = length(files)
   }
   
   # IF DATA.FRAME PROVIDED... ----
   if (!is.null(data) & is.null(datadir)) {
     files = data
+    toProcess = 1
   }
   
   if (!is.null(data) & !is.null(datadir)) stop("datadir and data provided, please define only one of them")
 
   # daily output ----
-  pb = utils::txtProgressBar(min = 0, max = length(files), style = 3,
+  pb = utils::txtProgressBar(min = 0, max = toProcess , style = 3,
                       title = paste0("Processing ", length(files), " files..."))
-  for (i in 1:length(files)) {
+  
+  for (i in 1:toProcess) {
     utils::setTxtProgressBar(pb, i)
     # read data
-    dat = utils::read.csv(files[i])
-
-    # ID
-    id = tools::file_path_sans_ext(basename(files[i]))
-
+    if(is.character(files)) {
+      dat = utils::read.csv(files[i])
+      # ID
+      id = tools::file_path_sans_ext(basename(files[i]))
+    }
+    if(is.data.frame(files)) {
+      dat = files
+      id = "not extracted"
+    }
+    
     # date
     dat$date = as.POSIXct(dat$local, tz = "Europe/Stockholm")
 

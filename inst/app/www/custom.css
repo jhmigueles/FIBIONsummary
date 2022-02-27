@@ -1,5 +1,5 @@
 /*Background color*/
-body {background-color: #FFFFFF;}
+body {background-color: #f1f1f1;}
 
 
 
@@ -13,8 +13,8 @@ body {background-color: #FFFFFF;}
  font-weight:bold;
 }
 h1{
-  color:#E85A4F;
-  text-align:center;
+  color:#003f5c;
+  text-align:left;
   font-weight:bolder;
 }
 h4{
