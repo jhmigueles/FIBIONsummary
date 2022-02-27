@@ -6,7 +6,7 @@
 #'
 #' @return FIBION data aggregated at day and week levels.
 #' @export
-get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", store.csv = FALSE) {
+get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", store.csv = FALSE, ID = NULL) {
   
   # IF FILEPATH OR DIRECTORY PATH PROVIDED... ----
   if (!is.null(datadir) & is.null(data)) {
@@ -44,10 +44,11 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     if(is.data.frame(files)) {
       dat = files
       id = "not extracted"
+      if (!is.null(ID)) id = ID
     }
     
     # date
-    dat$date = as.POSIXct(dat$local, tz = "Europe/Stockholm")
+    dat$date = as.character(as.POSIXct(dat$unixts/100, origin = "1970-01-01"))
 
     options(warn = -1)
     for (ci in 4:(ncol(dat) - 1)) {

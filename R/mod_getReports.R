@@ -10,7 +10,7 @@
 mod_getReports_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h1("FIBION Summary")
+    h1(" FIBION Summary")
     ,
     sidebarPanel(
       shinyjs::useShinyjs(),
@@ -51,16 +51,20 @@ mod_getReports_server <- function(id){
     output$weekSummary <- renderTable({
       req(input$datadir)
       upload = list()
+      id = list()
       withProgress(message = 'Aggregating data', value = 0, {
         for (nr in 1:length(input$datadir[, 1])) {
           upload[[nr]] <- read.csv(
             file = input$datadir[[nr, 'datapath']]
           )
+          id[[nr]] <- tools::file_path_sans_ext(
+            x = basename(input$datadir[[nr, 'datapath']])
+          )
           
           incProgress(0.5/length(input$datadir[, 1]), 
                       detail = paste("Processing \n", nr, sep = ""))
           # Run function
-          output = FIBIONsummary::get.report_FIBION(data = upload[[nr]], outputdir = outputdir)
+          output = FIBIONsummary::get.report_FIBION(data = upload[[nr]], outputdir = outputdir, ID = id[[nr]])
           if (nr == 1) {
             daySummary = output$daySummary
             weekSummary = output$weekSummary
@@ -88,11 +92,14 @@ mod_getReports_server <- function(id){
           upload[[nr]] <- read.csv(
             file = input$datadir[[nr, 'datapath']]
           )
+          id[[nr]] <- tools::file_path_sans_ext(
+            x = basename(input$datadir[[nr, 'datapath']])
+          )
           
           incProgress(0.5/length(input$datadir[, 1]), 
                       detail = paste("Processing \n", nr, sep = ""))
           # Run function
-          output = FIBIONsummary::get.report_FIBION(data = upload[[nr]], outputdir = outputdir)
+          output = FIBIONsummary::get.report_FIBION(data = upload[[nr]], outputdir = outputdir, ID = id[[nr]])
           if (nr == 1) {
             daySummary = output$daySummary
             weekSummary = output$weekSummary

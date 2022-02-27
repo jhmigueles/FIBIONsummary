@@ -5,6 +5,9 @@
 #' @import shiny
 #' @noRd
 app_ui <- function(request) {
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+  )
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),

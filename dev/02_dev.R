@@ -21,6 +21,7 @@ usethis::use_package( "plyr" )
 usethis::use_package( "utils" )
 usethis::use_package( "stats" )
 usethis::use_package( "rlang" )
+usethis::use_package( "tools" )
 
 
 ## Add modules ----
@@ -37,7 +38,7 @@ golem::add_utils( "helpers" )
 ## Creates .js and .css files at inst/app/www
 golem::add_js_file( "script" )
 golem::add_js_handler( "handlers" )
-golem::add_css_file( "custom" )
+golem::add_css_file( "style" )
 
 ## Add internal datasets ----
 ## If you have data in your package
