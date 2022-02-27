@@ -41,7 +41,7 @@ mod_getReports_ui <- function(id){
         col_6(
           div(style = 'overflow-x: scroll; overflow-y: scroll;height:300px;',
               tableOutput(ns("selected")), 
-              width = 6, height = "150px")
+              width = 6, height = "300px")
         ),
         col_6(
           div(style = 'overflow-x: scroll; overflow-y: scroll;height:300px;',
