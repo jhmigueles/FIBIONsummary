@@ -135,8 +135,8 @@ mod_getReports_server = function(id){
         temp_directory <- file.path(tempdir(), as.integer(Sys.time()))
         dir.create(temp_directory)
         
-        utils::write.csv(weekSummary(), file.path(temp_directory, "weekSummary.csv"), row.names = FALSE)
-        utils::write.csv(daySummary(), file.path(temp_directory, "daySummary.csv"), row.names = FALSE)
+        openxlsx::write.xlsx(weekSummary(), file.path(temp_directory, "weekSummary.xlsx"), row.names = FALSE)
+        openxlsx::write.xlsx(daySummary(), file.path(temp_directory, "daySummary.xlsx"), row.names = FALSE)
         
         zip::zip(
           zipfile = file,

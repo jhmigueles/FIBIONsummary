@@ -22,6 +22,7 @@ usethis::use_package( "utils" )
 usethis::use_package( "stats" )
 usethis::use_package( "rlang" )
 usethis::use_package( "tools" )
+usethis::use_package( "openxlsx" )
 
 
 ## Add modules ----
