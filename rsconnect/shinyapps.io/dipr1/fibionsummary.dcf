@@ -5,7 +5,7 @@ account: dipr1
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5736084
-bundleId: 5622665
-url: https://dipr1.shinyapps.io/fibionsummary/
-when: 1645970994.8242
-lastSyncTime: 1645970994.8242
+bundleId: 5626037
+url: https://jhmigueles.shinyapps.io/fibionsummary/
+when: 1646068990.1907
+lastSyncTime: 1646068990.1907
