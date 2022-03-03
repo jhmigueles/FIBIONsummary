@@ -80,9 +80,11 @@ mod_getReports_server = function(id){
           output = FIBIONsummary::get.report_FIBION(data = upload[[nr]], outputdir = outputdir, ID = id[[nr]])
           if (nr == 1) {
             daySummary = output$daySummary
+            daySummary_clean = output$dayCleanSummary
             weekSummary = output$weekSummary
           } else if (nr > 1) {
             daySummary =  plyr::rbind.fill(daySummary, output$daySummary)
+            daySummary_clean =  plyr::rbind.fill(daySummary_clean, output$dayCleanSummary)
             weekSummary = plyr::rbind.fill(weekSummary, output$weekSummary)
           }
           incProgress(0.5/length(datadir),
@@ -118,9 +120,11 @@ mod_getReports_server = function(id){
           output = FIBIONsummary::get.report_FIBION(data = upload[[nr]], outputdir = outputdir, ID = id[[nr]])
           if (nr == 1) {
             daySummary = output$daySummary
+            daySummary_clean = output$dayCleanSummary
             weekSummary = output$weekSummary
           } else if (nr > 1) {
             daySummary =  plyr::rbind.fill(daySummary, output$daySummary)
+            daySummary_clean =  plyr::rbind.fill(daySummary_clean, output$dayCleanSummary)
             weekSummary = plyr::rbind.fill(weekSummary, output$weekSummary)
           }
           incProgress(0.5/length(datadir),
@@ -134,6 +138,7 @@ mod_getReports_server = function(id){
     })
     
     output$daySummary = renderTable(daySummary())
+    output$daySummary_clean = renderTable(daySummary_clean())
     
     
     # Download button ---------------------------------------------------------
@@ -147,6 +152,7 @@ mod_getReports_server = function(id){
         dir.create(temp_directory)
         
         openxlsx::write.xlsx(weekSummary(), file.path(temp_directory, "weekSummary.xlsx"), row.names = FALSE)
+        openxlsx::write.xlsx(daySummary_clean(), file.path(temp_directory, "daySummary_clean.xlsx"), row.names = FALSE)
         openxlsx::write.xlsx(daySummary(), file.path(temp_directory, "daySummary.xlsx"), row.names = FALSE)
         
         zip::zip(

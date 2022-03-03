@@ -72,48 +72,56 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     daily = daily[, c(ncol(daily), 1, (ncol(daily) - 2):(ncol(daily) - 1), 2:(ncol(daily) - 3))]
 
     # weekly averages ----
+    # clean days with less than 23 hours or less than 10 hours of wear data
+    days2exclude = which(daily$Window.time < 23*60 | (daily$Window.time - daily$`general/nodata/time`) < 10*60)
+    daily_clean = daily[-days2exclude,]
+    
+    # weekly values
     weekly = as.data.frame(matrix(NA, nrow = 1, ncol = 100))
     weekly[1,1] = id
-    weekly[1,2] = nrow(daily)
-    weekly[1,3] = sum(daily$Weekday <= 5)
-    weekly[1,4] = sum(daily$Weekday >= 6)
+    weekly[1,2] = nrow(daily_clean)
+    weekly[1,3] = sum(daily_clean$Weekday <= 5)
+    weekly[1,4] = sum(daily_clean$Weekday >= 6)
     w_names = c("ID", "nDays", "nWeekdays", "nWeekends")
 
     ci = 4
     # Averages
-    day2week = grep("time|count", colnames(daily))
+    day2week = grep("time|count", colnames(daily_clean))
     # plain means
     for (wk in 1:length(day2week)) {
       ci = ci + 1
-      weekly[1, ci] = mean(daily[,day2week[wk]])
-      w_names[ci] = paste0(colnames(daily)[day2week[wk]], "_pla")
+      weekly[1, ci] = mean(daily_clean[,day2week[wk]])
+      w_names[ci] = paste0(colnames(daily_clean)[day2week[wk]], "_pla")
     }
     # weighted means
-    for(wk in 1:length(day2week)) {
+    for (wk in 1:length(day2week)) {
       ci = ci + 1
-      weekly[1, ci] = ((mean(daily[which(daily$Weekday <= 5), day2week[wk]])*5) + (mean(daily[which(daily$Weekday >= 5), day2week[wk]])*2)) / 7
-      w_names[ci] = paste0(colnames(daily)[day2week[wk]], "_wei")
+      weekly[1, ci] = ((mean(daily_clean[which(daily_clean$Weekday <= 5), day2week[wk]])*5) + (mean(daily_clean[which(daily_clean$Weekday >= 5), day2week[wk]])*2)) / 7
+      w_names[ci] = paste0(colnames(daily_clean)[day2week[wk]], "_wei")
     }
     colnames(weekly)[1:ci] = w_names
     weekly = weekly[, 1:ci]
     
-    if(i == 1) {
+    if (i == 1) {
       week_out = weekly
       day_out = daily
+      dayClean_out = daily_clean
     } else {
       week_out = plyr::rbind.fill(week_out, weekly)
       day_out = plyr::rbind.fill(day_out, daily)
+      dayClean_out = plyr::rbind.fill(dayClean_out, daily_clean)
     }
   }
 
   # store output
-  if(isTRUE(store.output)) {
-    if(!dir.exists(file.path(outputdir))) dir.create(outputdir)
+  if (isTRUE(store.output)) {
+    if (!dir.exists(file.path(outputdir))) dir.create(outputdir)
     
     openxlsx::write.xlsx(day_out, file.path(outputdir, "daysummary.xlsx"))
+    openxlsx::write.xlsx(dayClean_out, file.path(outputdir, "daysummary_clean.xlsx"))
     openxlsx::write.xlsx(week_out, file.path(outputdir, "weeksummary.xlsx"))
   }
   
   # return
-  return(list(daySummary = day_out, weekSummary = week_out))
+  invisible(list(daySummary = day_out, dayCleanSummary = dayClean_out, weekSummary = week_out))
 }
