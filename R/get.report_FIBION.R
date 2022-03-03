@@ -1,8 +1,9 @@
 #' get.report_FIBION
 #'
-#' @param datadir Path to directory where the output csv files exported from FIBION are stored.
-#' @param outputdir Path to directory where the data sets should be stored.
-#' @param store.csv Logical to indicate whether the csv reports should be stored as csv files in outputdir.
+#' @param datadir Character. Path to directory where the output csv files exported from FIBION are stored.
+#' @param outputdir Character. Path to directory where the data sets should be stored.
+#' @param store.csv Logical (default = TRUE). Indicate whether the csv reports should be stored as csv files in outputdir.
+#' @param ID Numeric or character (default = NULL). Specify the ID of the file being processed (only works if processing 1 file).
 #'
 #' @return FIBION data aggregated at day and week levels.
 #' @export
@@ -11,7 +12,7 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
   # IF FILEPATH OR DIRECTORY PATH PROVIDED... ----
   if (!is.null(datadir) & is.null(data)) {
     if (isTRUE(dir.exists(datadir)) & isFALSE(file.exists(datadir))) { # then, a directory is provided
-      files = dir(datadir, full.names = T, pattern = "*.csv")
+      files = dir(datadir, full.names = T, pattern = ".csv")
     } else if (isFALSE(unique(dir.exists(datadir))) & isTRUE(unique(file.exists(datadir)))) { #then filenames are provided
       files = datadir
       datadir = dirname(files[1])
