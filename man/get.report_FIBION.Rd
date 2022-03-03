@@ -13,11 +13,11 @@ get.report_FIBION(
 )
 }
 \arguments{
-\item{datadir}{Path to directory where the output csv files exported from FIBION are stored.}
+\item{datadir}{Character. Path to directory where the output csv files exported from FIBION are stored.}
 
-\item{outputdir}{Path to directory where the data sets should be stored.}
+\item{outputdir}{Character. Path to directory where the data sets should be stored.}
 
-\item{store.csv}{Logical to indicate whether the csv reports should be stored as csv files in outputdir.}
+\item{store.output}{Logical (default = FALSE). Indicate whether the generated datasets should be stored in outputdir.}
 
 \item{ID}{Numeric or character (default = NULL). Specify the ID of the file being processed (only works if processing 1 file).}
 }

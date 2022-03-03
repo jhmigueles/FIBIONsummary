@@ -2,12 +2,12 @@
 #'
 #' @param datadir Character. Path to directory where the output csv files exported from FIBION are stored.
 #' @param outputdir Character. Path to directory where the data sets should be stored.
-#' @param store.csv Logical (default = TRUE). Indicate whether the csv reports should be stored as csv files in outputdir.
+#' @param store.output Logical (default = FALSE). Indicate whether the generated datasets should be stored in outputdir.
 #' @param ID Numeric or character (default = NULL). Specify the ID of the file being processed (only works if processing 1 file).
 #'
 #' @return FIBION data aggregated at day and week levels.
 #' @export
-get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", store.csv = FALSE, ID = NULL) {
+get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", store.output = FALSE, ID = NULL) {
   
   # IF FILEPATH OR DIRECTORY PATH PROVIDED... ----
   if (!is.null(datadir) & is.null(data)) {
@@ -104,11 +104,11 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
   }
 
   # store output
-  if(isTRUE(store.csv)) {
+  if(isTRUE(store.output)) {
     if(!dir.exists(file.path(outputdir))) dir.create(outputdir)
     
-    utils::write.csv(day_out, file.path(outputdir, "daysummary.csv"), row.names = F)
-    utils::write.csv(week_out, file.path(outputdir, "weeksummary.csv"), row.names = F)
+    openxlsx::write.xlsx(day_out, file.path(outputdir, "daysummary.csv"), row.names = F)
+    openxlsx::write.xlsx(week_out, file.path(outputdir, "weeksummary.csv"), row.names = F)
   }
   
   # return
