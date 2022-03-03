@@ -74,7 +74,8 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     # weekly averages ----
     # clean days with less than 23 hours or less than 10 hours of wear data
     days2exclude = which(daily$Window.time < 23*60 | (daily$Window.time - daily$`general/nodata/time`) < 10*60)
-    daily_clean = daily[-days2exclude,]
+    if (length(days2exclude) > 0) daily_clean = daily[-days2exclude,]
+    if (length(days2exclude) == 0) daily_clean = daily
     
     # weekly values
     weekly = as.data.frame(matrix(NA, nrow = 1, ncol = 100))
