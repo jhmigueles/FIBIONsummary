@@ -107,8 +107,8 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
   if(isTRUE(store.output)) {
     if(!dir.exists(file.path(outputdir))) dir.create(outputdir)
     
-    openxlsx::write.xlsx(day_out, file.path(outputdir, "daysummary.csv"), row.names = F)
-    openxlsx::write.xlsx(week_out, file.path(outputdir, "weeksummary.csv"), row.names = F)
+    openxlsx::write.xlsx(day_out, file.path(outputdir, "daysummary.xlsx"))
+    openxlsx::write.xlsx(week_out, file.path(outputdir, "weeksummary.xlsx"))
   }
   
   # return
