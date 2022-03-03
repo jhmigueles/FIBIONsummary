@@ -70,11 +70,22 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     colnames(daily) = c("Date", colnames(dat)[4:(ncol(dat) - 1)], "Weekday", "Window.time", "ID")
 
     daily = daily[, c(ncol(daily), 1, (ncol(daily) - 2):(ncol(daily) - 1), 2:(ncol(daily) - 3))]
+    
+    colnames(daily) = gsub(x = colnames(daily), pattern = "/", replacement = ".")
 
     # weekly averages ----
-    # clean days with less than 23 hours or less than 10 hours of wear data
+    # clean days with less than 16 hours or less than 10 hours of wear data
     nodata_column = grep("nodata", colnames(daily))
-    days2exclude = which(daily$Window.time < 23*60 | (daily$Window.time - daily[,nodata_column]) < 10*60)
+    days2exclude = which(daily$Window.time < 16*60 | (daily$Window.time - daily[,nodata_column]) < 10*60)
+    if (days2exclude == nrow(daily)) {
+      cat("\n\nParticipant", id, "did not record any valid day (at least 16-hour long with 10 hours wearing the device)")
+      if (i == 1) {
+        day_out = daily
+      } else {
+        day_out = plyr::rbind.fill(day_out, daily)
+      }
+      next()
+    }
     if (length(days2exclude) > 0) daily_clean = daily[-days2exclude,]
     if (length(days2exclude) == 0) daily_clean = daily
     
