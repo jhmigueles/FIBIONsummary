@@ -12,7 +12,7 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
   # IF FILEPATH OR DIRECTORY PATH PROVIDED... ----
   if (!is.null(datadir) & is.null(data)) {
     if (isTRUE(dir.exists(datadir)) & isFALSE(file.exists(datadir))) { # then, a directory is provided
-      files = dir(datadir, full.names = T, pattern = ".csv")
+      files = dir(datadir, full.names = T, pattern = ".csv|.xlsx")
     } else if (isFALSE(unique(dir.exists(datadir))) & isTRUE(unique(file.exists(datadir)))) { #then filenames are provided
       files = datadir
       datadir = dirname(files[1])
@@ -36,13 +36,16 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
   
   for (i in 1:toProcess) {
     utils::setTxtProgressBar(pb, i)
+    filename_split = unlist(strsplit(files[i], ".", fixed = T))
+    format = filename_split[length(filename_split)]
     # read data
-    if(is.character(files)) {
-      dat = utils::read.csv(files[i])
+    if (is.character(files)) {
+      if (format == "csv") dat = utils::read.csv(files[i])
+      if (format == "xlsx") dat = openxlsx::read.xlsx(files[i])
       # ID
       id = tools::file_path_sans_ext(basename(files[i]))
     }
-    if(is.data.frame(files)) {
+    if (is.data.frame(files)) {
       dat = files
       id = "not extracted"
       if (!is.null(ID)) id = ID
