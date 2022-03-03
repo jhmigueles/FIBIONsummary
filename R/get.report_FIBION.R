@@ -29,10 +29,10 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
   }
   
   if (!is.null(data) & !is.null(datadir)) stop("datadir and data provided, please define only one of them")
-
+  
   # daily output ----
   pb = utils::txtProgressBar(min = 0, max = toProcess , style = 3,
-                      title = paste0("Processing ", length(files), " files..."))
+                             title = paste0("Processing ", length(files), " files..."))
   
   for (i in 1:toProcess) {
     utils::setTxtProgressBar(pb, i)
@@ -54,78 +54,86 @@ get.report_FIBION = function(datadir = NULL, data = NULL, outputdir = "./", stor
     # date
     dat$date = substr(as.character(as.POSIXct(dat$unixts/1000, origin = "1970-01-01")), 1, 10)
     date = as.POSIXct(dat$unixts/1000, origin = "1970-01-01")
-
+    
     options(warn = -1)
     for (ci in 4:(ncol(dat) - 1)) {
       if (ci == 4) daily = stats::aggregate(dat[, ci] ~ dat$date, FUN = sum)
       if (ci > 4) daily = merge(daily, stats::aggregate(dat[, ci] ~ dat$date, FUN = sum), by = "dat$date")
     }
     options(warn = 0)
-
+    
     # some extra vars
     daily$Weekday = as.numeric(format(as.POSIXct(daily[, 1]), format="%u"))
     daily$window.time = rowSums(daily[,2:(ncol(daily) - 5)])
     daily$ID = id
-
+    
     colnames(daily) = c("Date", colnames(dat)[4:(ncol(dat) - 1)], "Weekday", "Window.time", "ID")
-
+    
     daily = daily[, c(ncol(daily), 1, (ncol(daily) - 2):(ncol(daily) - 1), 2:(ncol(daily) - 3))]
     
     colnames(daily) = gsub(x = colnames(daily), pattern = "/", replacement = ".")
-
+    
     # weekly averages ----
     # clean days with less than 16 hours or less than 10 hours of wear data
     nodata_column = grep("nodata", colnames(daily))
     days2exclude = which(daily$Window.time < 16*60 | (daily$Window.time - daily[,nodata_column]) < 10*60)
-    if (days2exclude == nrow(daily)) {
-      cat("\n\nParticipant", id, "did not record any valid day (at least 16-hour long with 10 hours wearing the device)")
-      if (i == 1) {
-        day_out = daily
-      } else {
-        day_out = plyr::rbind.fill(day_out, daily)
+    skip = FALSE
+    if (length(days2exclude) > 0) {
+      if (length(days2exclude) == nrow(daily)) {
+        warning("Participant ", id, " did not record any valid day (at least 16-hour long with 10 hours wearing the device)")
+        if (i == 1) {
+          day_out = daily
+        } else {
+          day_out = plyr::rbind.fill(day_out, daily)
+        }
+        skip = TRUE
       }
-      next()
     }
-    if (length(days2exclude) > 0) daily_clean = daily[-days2exclude,]
-    if (length(days2exclude) == 0) daily_clean = daily
     
-    # weekly values
-    weekly = as.data.frame(matrix(NA, nrow = 1, ncol = 100))
-    weekly[1,1] = id
-    weekly[1,2] = nrow(daily_clean)
-    weekly[1,3] = sum(daily_clean$Weekday <= 5)
-    weekly[1,4] = sum(daily_clean$Weekday >= 6)
-    w_names = c("ID", "nDays", "nWeekdays", "nWeekends")
-
-    ci = 4
-    # Averages
-    day2week = grep("time|count", colnames(daily_clean))
-    # plain means
-    for (wk in 1:length(day2week)) {
-      ci = ci + 1
-      weekly[1, ci] = mean(daily_clean[,day2week[wk]])
-      w_names[ci] = paste0(colnames(daily_clean)[day2week[wk]], "_pla")
+    if (isFALSE(skip)) {
+      if (length(days2exclude) > 0) daily_clean = daily[-days2exclude,]
+      if (length(days2exclude) == 0) daily_clean = daily
+      
+      # weekly values
+      weekly = as.data.frame(matrix(NA, nrow = 1, ncol = 100))
+      weekly[1,1] = id
+      weekly[1,2] = nrow(daily_clean)
+      weekly[1,3] = sum(daily_clean$Weekday <= 5)
+      weekly[1,4] = sum(daily_clean$Weekday >= 6)
+      w_names = c("ID", "nDays", "nWeekdays", "nWeekends")
+      
+      ci = 4
+      # Averages
+      day2week = grep("time|count", colnames(daily_clean))
+      # plain means
+      for (wk in 1:length(day2week)) {
+        ci = ci + 1
+        weekly[1, ci] = mean(daily_clean[,day2week[wk]])
+        w_names[ci] = paste0(colnames(daily_clean)[day2week[wk]], "_pla")
+      }
+      # weighted means
+      for (wk in 1:length(day2week)) {
+        ci = ci + 1
+        weekly[1, ci] = ((mean(daily_clean[which(daily_clean$Weekday <= 5), day2week[wk]])*5) + (mean(daily_clean[which(daily_clean$Weekday >= 5), day2week[wk]])*2)) / 7
+        w_names[ci] = paste0(colnames(daily_clean)[day2week[wk]], "_wei")
+      }
+      colnames(weekly)[1:ci] = w_names
+      weekly = weekly[, 1:ci]
+      
+      if (i == 1) {
+        week_out = weekly
+        day_out = daily
+        dayClean_out = daily_clean
+      } else {
+        week_out = plyr::rbind.fill(week_out, weekly)
+        day_out = plyr::rbind.fill(day_out, daily)
+        dayClean_out = plyr::rbind.fill(dayClean_out, daily_clean)
+      }
     }
-    # weighted means
-    for (wk in 1:length(day2week)) {
-      ci = ci + 1
-      weekly[1, ci] = ((mean(daily_clean[which(daily_clean$Weekday <= 5), day2week[wk]])*5) + (mean(daily_clean[which(daily_clean$Weekday >= 5), day2week[wk]])*2)) / 7
-      w_names[ci] = paste0(colnames(daily_clean)[day2week[wk]], "_wei")
-    }
-    colnames(weekly)[1:ci] = w_names
-    weekly = weekly[, 1:ci]
     
-    if (i == 1) {
-      week_out = weekly
-      day_out = daily
-      dayClean_out = daily_clean
-    } else {
-      week_out = plyr::rbind.fill(week_out, weekly)
-      day_out = plyr::rbind.fill(day_out, daily)
-      dayClean_out = plyr::rbind.fill(dayClean_out, daily_clean)
-    }
+    
   }
-
+  
   # store output
   if (isTRUE(store.output)) {
     if (!dir.exists(file.path(outputdir))) dir.create(outputdir)
