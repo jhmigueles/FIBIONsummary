@@ -56,9 +56,20 @@ mod_getReports_server = function(id){
       id = list()
       withProgress(message = 'Aggregating data', value = 0, {
         for (nr in 1:length(input$datadir[, 1])) {
-          upload[[nr]] = read.csv(
-            file = input$datadir[[nr, 'datapath']]
-          )
+          filename_split = unlist(strsplit(input$datadir[[nr, 'datapath']], ".", fixed = T))
+          format = filename_split[length(filename_split)]
+          if (format == "csv") {
+            upload[[nr]] = read.csv(
+              file = input$datadir[[nr, 'datapath']]
+            )
+          }
+          
+          if (format == "xlsx") {
+            upload[[nr]] = openxlsx::read.xlsx(
+              file = input$datadir[[nr, 'datapath']]
+            )
+          }
+          
           id[[nr]] = tools::file_path_sans_ext(
             x = basename(input$datadir[[nr, 'datapath']])
           )
